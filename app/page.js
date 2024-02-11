@@ -1,72 +1,48 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { get, useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { i } from "plotly.js/dist/plotly-cartesian";
 
 export default function Home() {
-  const [data, setData] = useState({});
   const { register, handleSubmit } = useForm();
-  const [getDeffusivity, setGetDeffusivity] = useState(null);
-  const diffusivity = [];
-
-  useEffect(() => {
-    const calculateDeffusivity = () => {
-      if (
-        data.temperature &&
-        data.solvent &&
-        data.solventViscosity &&
-        data.soluteMolalVolume &&
-        data.solventMolarMass
-      ) {
-        const getDeffusivity = (T, phi, Mb, ub, Vca) => {
-          const Vta = 0.285 * Vca ** 1.048;
-          return (
-            (117.3 * Math.pow(10, -18) * Math.pow(phi * Mb, 0.5) * T) /
-            (ub * Math.pow(Vta, 0.6))
-          );
-        };
-
-        setGetDeffusivity((prevDeffusivity) =>
-          getDeffusivity(
-            data.temperature,
-            data.solvent,
-            data.solventMolarMass,
-            data.solventViscosity,
-            data.soluteMolalVolume
-          ).toExponential(4)
-        );
-      }
-    };
-
-    calculateDeffusivity();
-  }, [data]);
+  const [loading, setLoading] = useState(false);
+  const [Data, setData] = useState({
+    temperature: 0,
+    diffusivity: null,
+  });
 
   const onSubmit = (data) => {
     if (data.solvent == data.soluteMolalVolume) {
       alert("Association Coefficient and soluteMolalVolume cannot be same");
       return;
     }
+    setLoading(true);
+    fetch("/api/diffusivity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+        console.log(data);
 
-    setData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setLoading(false);
+      });
   };
 
   return (
-    <section className="bg-gray-100 min-h-screen flex items-center justify-center px-5">
+    <section className="bg-gray-100 min-h-screen flex items-center flex-col justify-center px-5">
       <form
         className="w-full sm:w-[50%] mx-auto mt-8"
         onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label
-            htmlFor="temperature"
-            className="block text-gray-700 text-sm font-bold mb-2">
-            Temperature (kelvin)
-          </label>
-          <input
-            required
-            {...register("temperature")}
-            type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
         <div className="mb-4">
           <label
             htmlFor="solvent"
@@ -85,6 +61,20 @@ export default function Home() {
             <option value="1">Hexane</option>
             <option value="1">Toluene</option>
           </select>
+        </div>
+
+        <div className="mb-4">
+          <label
+            htmlFor="solventMolarMass"
+            className="block text-gray-700 text-sm font-bold mb-2">
+            solventMolarMass (g/mol)
+          </label>
+          <input
+            required
+            {...register("solventMolarMass")}
+            type="text"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
         </div>
         <div className="mb-4">
           <label
@@ -118,19 +108,21 @@ export default function Home() {
             <option value="1">Toluene</option>
           </select>
         </div>
+
         <div className="mb-4">
           <label
-            htmlFor="solventMolarMass"
+            htmlFor="temperature"
             className="block text-gray-700 text-sm font-bold mb-2">
-            solventMolarMass (g/mol)
+            Temperature (kelvin)
           </label>
           <input
             required
-            {...register("solventMolarMass")}
+            {...register("temperature")}
             type="text"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
+
         <div className="mb-4">
           <button
             type="submit"
@@ -138,10 +130,14 @@ export default function Home() {
             Submit
           </button>
         </div>
-        <div className="mb-4 text-gray-800 font-bold">
-          <p>Deffusivity: {getDeffusivity} m2/s</p>
-        </div>
       </form>
+      <div className="mb-4 text-gray-800 font-bold text-center">
+        {loading ? "Calculating..." : <p>Diffusivity: {Data.diffusivity}</p>}
+
+        <Link href="/graph">
+          <p className="text-blue-500">View Graph</p>
+        </Link>
+      </div>
     </section>
   );
 }
