@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import createPlotlyComponent from "react-plotlyjs";
-
+import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import plotly from "plotly.js/dist/plotly";
@@ -16,7 +16,7 @@ const Graph = () => {
 
   useEffect(() => {
     // fetch the data
-    fetch("/api/diffusivity")
+    fetch("/api/diffusivity", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         setGraphData(data.graphData);
@@ -108,26 +108,42 @@ const Graph = () => {
             {graphData.map((item, index) => {
               return (
                 <div className="flex" key={index}>
-                  <p className="border-2 px-6 py-1 ">{item.temperature}</p>
-                  <p className="border-2 px-6 py-1">{item.diffusivity}</p>
+                  <p className="border-2 px-6 py-1 w-[100px]">
+                    {item.temperature}
+                  </p>
+                  <p className="border-2 px-6 py-1 w-[200px]">
+                    {item.diffusivity}
+                  </p>
                 </div>
               );
             })}
           </div>
         </div>
       ) : (
-        <Link href="/">Add Data</Link>
+        <Link
+          className="border-2 px-4 py-2 w-[200px] text-center hover:bg-gray-400 bg-gray-200 rounded-md"
+          href="/">
+          Add Data
+        </Link>
       )}
-      <PlotlyComponent
-        className="whatever"
-        data={data}
-        layout={layout}
-        config={config}
-      />
+      <Suspense fallback={<div>Loading</div>}>
+        <PlotlyComponent
+          className="whatever"
+          data={data}
+          layout={layout}
+          config={config}
+        />
+      </Suspense>
+      <Link
+        className="border-2 px-4 py-2 w-[200px] text-center hover:bg-gray-400 bg-gray-200 rounded-md"
+        href="/">
+        Add more Data
+      </Link>
+
       <button
-        className="bg-red-600 rounded-md hover:bg-red-800 px-4 py-2 w-[200px] text-white mt-4"
+        className="bg-red-600 rounded-md hover:bg-red-800 px-4 py-2 w-[200px] text-white mt-4 mb-8"
         onClick={deleteData}>
-        Delete Graph Data
+        Delete Data
       </button>
     </section>
   );

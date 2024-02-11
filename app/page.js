@@ -132,7 +132,14 @@ export default function Home() {
         </div>
       </form>
       <div className="mb-4 text-gray-800 font-bold text-center">
-        {loading ? "Calculating..." : <p>Diffusivity: {Data.diffusivity}</p>}
+        {loading ? (
+          "Calculating..."
+        ) : (
+          <p>
+            Diffusivity: {Data.diffusivity}
+            (m^2/s)
+          </p>
+        )}
 
         <Link href="/graph">
           <p className="text-blue-500">View Graph</p>
