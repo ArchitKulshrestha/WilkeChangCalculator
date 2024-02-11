@@ -2,7 +2,6 @@
 import { get, useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { i } from "plotly.js/dist/plotly-cartesian";
 
 export default function Home() {
   const { register, handleSubmit } = useForm();
