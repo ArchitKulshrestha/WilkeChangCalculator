@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import createPlotlyComponent from "react-plotlyjs";
-import { Suspense } from "react";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import plotly from "plotly.js/dist/plotly";
 import createPlotComponent from "react-plotly.js/factory";
+
 const PlotlyComponent = createPlotlyComponent(plotly);
 const Graph = () => {
   const router = useRouter();
@@ -126,14 +127,12 @@ const Graph = () => {
           Add Data
         </Link>
       )}
-      <Suspense fallback={<div>Loading</div>}>
-        <PlotlyComponent
-          className="whatever"
-          data={data}
-          layout={layout}
-          config={config}
-        />
-      </Suspense>
+      <PlotlyComponent
+        className="whatever"
+        data={data}
+        layout={layout}
+        config={config}
+      />
       <Link
         className="border-2 px-4 py-2 w-[200px] text-center hover:bg-gray-400 bg-gray-200 rounded-md"
         href="/">
