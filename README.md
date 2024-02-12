@@ -1,8 +1,6 @@
 
 
-# Wilke Chang Calculator
-
-A tool to calculate the diffusivity of liquids with dilute solvent.
+## Diffusivity Calculator
 
 ## Overview
 
