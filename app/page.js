@@ -7,15 +7,11 @@ export default function Home() {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
   const [Data, setData] = useState({
-    temperature: 0,
-    diffusivity: null,
+    temperature: 273.15,
+    diffusivity: 0.0,
   });
 
   const onSubmit = (data) => {
-    if (data.solvent == data.soluteMolalVolume) {
-      alert("Association Coefficient and soluteMolalVolume cannot be same");
-      return;
-    }
     setLoading(true);
     fetch("/api/diffusivity", {
       method: "POST",
@@ -24,11 +20,15 @@ export default function Home() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
       .then((data) => {
         setData(data);
-        console.log(data);
-
+        // Log the response data
         setLoading(false);
       })
       .catch((error) => {
@@ -98,13 +98,13 @@ export default function Home() {
             required
             {...register("soluteMolalVolume")}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            defaultValue={1.5}>
-            <option value="2.26">Water</option>
-            <option value="1.5">Ethanol</option>
-            <option value="1.9">Methanol</option>
-            <option value="1">Benzene</option>
-            <option value="1">Hexane</option>
-            <option value="1">Toluene</option>
+            defaultValue={0.0592}>
+            <option value="0.0148">Water</option>
+            <option value="0.0592">Ethanol</option>
+            <option value="0.037">Methanol</option>
+            <option value="0.096">Benzene</option>
+            <option value="0.1406">Hexane</option>
+            <option value="0.1182">Toluene</option>
           </select>
         </div>
 
@@ -140,7 +140,7 @@ export default function Home() {
           </p>
         )}
 
-        <Link href="/graph">
+        <Link href="/graphgoogle">
           <p className="text-blue-500">View Graph</p>
         </Link>
       </div>

@@ -1,5 +1,6 @@
 import { connectToDB } from "@/utils/db";
 import graphs from "@/utils/diffusivity";
+export const dynamic = "force-dynamic";
 export async function POST(request) {
   const {
     temperature,
@@ -41,40 +42,27 @@ export async function POST(request) {
       temperature: temperature,
     });
 
-    return Response.json({
-      diffusivity,
-      temperature,
-    });
-  } catch (error) {
-    return Response.error(error);
-  }
-}
-
-export async function GET(request) {
-  try {
-    await connectToDB();
-    const graphData = await graphs.find();
-    return Response.json({
-      graphData,
-    });
+    return new Response(
+      JSON.stringify({
+        diffusivity,
+        temperature,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (err) {
     console.log(err);
-    return Response.json({
-      message: "An error occurred",
-    });
-  }
-}
-export async function DELETE(request) {
-  try {
-    await connectToDB();
-    await graphs.deleteMany();
-    return Response.json({
-      message: "Graph data deleted",
-    });
-  } catch (err) {
-    console.log(err);
-    return Response.json({
-      message: "An error occurred",
-    });
+    return new Response(
+      JSON.stringify({
+        message: "An error occurred",
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }

@@ -8,6 +8,7 @@ export const metadata = {
   description:
     "Calculate the diffusivity of a solute in a solvent using the Wilke-Chang equation.",
 };
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({ children }) {
   return (
