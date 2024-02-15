@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html data-theme="cupcake" lang="en">
       <body className={inter.className}>{children}</body>
     </html>
   );

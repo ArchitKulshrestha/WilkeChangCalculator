@@ -8,7 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [Data, setData] = useState({
     temperature: 273.15,
-    diffusivity: 0.0,
+    diffusivity: null,
   });
 
   const onSubmit = (data) => {
@@ -38,20 +38,18 @@ export default function Home() {
   };
 
   return (
-    <section className="bg-gray-100 min-h-screen flex items-center flex-col justify-center px-5">
+    <section className="min-h-screen flex items-center flex-col justify-center px-5">
       <form
-        className="w-full sm:w-[50%] mx-auto mt-8"
+        className="w-full sm:w-1/2 mx-auto mt-8"
         onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
-          <label
-            htmlFor="solvent"
-            className="block text-gray-700 text-sm font-bold mb-2">
+          <label htmlFor="solvent" className="block text-sm font-bold mb-2">
             Association Coefficient(φ)
           </label>
           <select
             required
             {...register("solvent")}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             defaultValue={2.26}>
             <option value="2.26">Water</option>
             <option value="1.5">Ethanol</option>
@@ -65,39 +63,39 @@ export default function Home() {
         <div className="mb-4">
           <label
             htmlFor="solventMolarMass"
-            className="block text-gray-700 text-sm font-bold mb-2">
-            solventMolarMass (g/mol)
+            className="block text-sm font-bold mb-2">
+            Solvent Molar Mass (g/mol)
           </label>
           <input
             required
             {...register("solventMolarMass")}
             type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
           <label
             htmlFor="solventViscosity"
-            className="block text-gray-700 text-sm font-bold mb-2">
-            solventViscosity (Pa.s)
+            className="block text-sm font-bold mb-2">
+            Solvent Viscosity (Pa.s)
           </label>
           <input
             required
             {...register("solventViscosity")}
             type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
         <div className="mb-4">
           <label
             htmlFor="soluteMolalVolume"
-            className="block text-gray-700 text-sm font-bold mb-2">
-            soluteMolalVolume (m3/Kmol)
+            className="block text-sm font-bold mb-2">
+            Solute Molal Volume (m3/Kmol)
           </label>
           <select
             required
             {...register("soluteMolalVolume")}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
             defaultValue={0.0592}>
             <option value="0.0148">Water</option>
             <option value="0.0592">Ethanol</option>
@@ -109,16 +107,14 @@ export default function Home() {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="temperature"
-            className="block text-gray-700 text-sm font-bold mb-2">
-            Temperature (kelvin)
+          <label htmlFor="temperature" className="block text-sm font-bold mb-2">
+            Temperature (Kelvin)
           </label>
           <input
             required
             {...register("temperature")}
             type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
 
@@ -130,18 +126,17 @@ export default function Home() {
           </button>
         </div>
       </form>
-      <div className="mb-4 text-gray-800 font-bold text-center">
+      <div className="mb-4 font-bold text-center">
         {loading ? (
           "Calculating..."
         ) : (
-          <p>
-            Diffusivity: {Data.diffusivity}
-            (m^2/s)
-          </p>
+          <p>Diffusivity: {Data.diffusivity} &nbsp; (m^2/s)</p>
         )}
 
         <Link href="/graphgoogle">
-          <p className="text-blue-500">View Graph</p>
+          <p className="bg-blue-100 hover:bg-blue-200 text-blue-500 font-bold py-2 px-4 rounded mt-4 inline-block cursor-pointer">
+            View Graph
+          </p>
         </Link>
       </div>
     </section>

@@ -45,6 +45,17 @@ const Dummy = () => {
   const diffusivity = graphData.map((item) => item.diffusivity);
   const temperature = graphData.map((item) => parseFloat(item.temperature));
 
+  // const options = {
+  //   pointSize: 5,
+  //   legend: "none",
+  //   hAxis: {
+  //     title: "Temperature",
+  //   },
+  //   vAxis: {
+  //     title: "Diffusivity",
+  //     format: "scientific",
+  //   },
+  // };
   const options = {
     pointSize: 5,
     legend: "none",
@@ -53,7 +64,6 @@ const Dummy = () => {
     },
     vAxis: {
       title: "Diffusivity",
-      format: "scientific",
     },
   };
 
@@ -84,7 +94,7 @@ const Dummy = () => {
             </div>
           ) : (
             <Link
-              className="border-2 px-4 py-2 w-[200px] text-center hover:bg-gray-400 bg-gray-200 rounded-md"
+              className="border-2 px-4 py-2 w-[200px] text-center  rounded-md btn btn-outline  mt-4"
               href="/">
               Add Data
             </Link>
@@ -95,16 +105,16 @@ const Dummy = () => {
               diffusivity.map((item, index) => [temperature[index], item])
             )}
             options={options}
-            className="sm:w-4/5 w-[500px] h-[500px]"
+            className="h-[400px] md:w-[80%] w-[800px] mt-4"
           />
           <div className="flex flex-col mt-4">
             <Link
-              className="border-2 px-4 py-2 w-[200px] text-center hover:bg-gray-400 bg-gray-200 rounded-md"
+              className="border-2 px-4 py-2 w-[200px] text-center  rounded-md btn btn-outline mt-4"
               href="/">
               Add more Data
             </Link>
             <button
-              className="bg-red-600 rounded-md hover:bg-red-800 px-4 py-2 w-[200px] text-white mt-4 mb-8"
+              className=" px-4 py-2 w-[200px] text-white mt-4 mb-8 btn btn-error"
               onClick={deleteData}>
               Delete Data
             </button>
